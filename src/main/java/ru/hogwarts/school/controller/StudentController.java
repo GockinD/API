@@ -54,4 +54,9 @@ public class StudentController {
         }
         return ResponseEntity.ok(Collections.emptyList());
     }
+
+    @GetMapping
+    public ResponseEntity<Collection<Student>> getAllStudent() {
+        return getAllStudent();
+    }
 }
