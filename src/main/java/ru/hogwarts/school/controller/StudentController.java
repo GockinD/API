@@ -58,8 +58,8 @@ public class StudentController {
     }
 
     @PostMapping
-    public ResponseEntity<Student> addStudent(@RequestBody Student student) {
-        return ResponseEntity.ok(studentService.addStudent(student));
+    public void addStudent(@RequestBody Student student) {
+        ResponseEntity.ok(studentService.addStudent(student));
     }
 
     @PutMapping
