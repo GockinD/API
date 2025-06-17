@@ -15,8 +15,7 @@ import ru.hogwarts.school.controller.StudentController;
 import ru.hogwarts.school.model.Faculty;
 import ru.hogwarts.school.model.Student;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import java.util.Collection;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class StudentControllerTest {
@@ -41,26 +40,26 @@ public class StudentControllerTest {
 
     @Test
     public void getStudentWithAgeBetweenTest() throws Exception {
-        Assertions.assertThat(this.testRestTemplate.getForObject("http://localhost:" + port + "/age-between", Student.class))
+        Assertions.assertThat(this.testRestTemplate.getForObject("http://localhost:" + port + "/student/age-between", Student.class))
                 .isNotNull();
     }
 
     @Test
     public void getStudentByAgeTest() throws Exception {
-        Assertions.assertThat(this.testRestTemplate.getForObject("http://localhost:" + port + "/by-age", Student.class))
+        Assertions.assertThat(this.testRestTemplate.getForObject("http://localhost:" + port + "/student/by-age", Student.class))
                 .isNotNull();
     }
 
     @Test
     public void getAllStudentTest() throws Exception {
-        Assertions.assertThat(this.testRestTemplate.getForObject("http://localhost:" + port + "/all", Student.class))
+        Assertions.assertThat(this.testRestTemplate.getForObject("http://localhost:" + port + "/student/all", Collection.class))
                 .isNotNull();
     }
 
     @Test
     public void getFacultyByStudentTest() throws Exception {
-        long id = 1;
-        Assertions.assertThat(this.testRestTemplate.getForObject("http://localhost:" + port + "/" + id + "/faculty", Faculty.class))
+        int id = 2;
+        Assertions.assertThat(this.testRestTemplate.getForObject("http://localhost:" + port + "/student/" + id + "/faculty", Faculty.class))
                 .isNotNull();
     }
 
@@ -109,14 +108,13 @@ public class StudentControllerTest {
         faculty = facultyController.addFaculty(faculty);
 
         Student student = new Student();
-        student.setId(1L);
+        student.setId(11L);
         student.setName("Test Student");
         student.setAge(20);
         student.setFaculty(faculty);
-        studentController.addStudent(student);
 
         ResponseEntity<Void> response = this.testRestTemplate.exchange(
-                "http://localhost:" + port + "/student/" + student.getId(),
+                "http://localhost:" + port + "/faculty/" + faculty.getId(),
                 HttpMethod.DELETE,
                 null,
                 Void.class);

@@ -15,5 +15,5 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
     Collection<Student> findByAgeBetween(int min, int max);
 
     @Query("SELECT s.faculty FROM Student s WHERE s.name = :name")
-    Faculty findFacultyByStudentName(@Param("name") String name);
+    Faculty findFacultyByStudentId(@Param("id") long id);
 }
