@@ -20,8 +20,8 @@ public class AvatarService {
     @Value("/avatars")
     private String avatarsDir;
 
-    private StudentService studentService;
-    private AvatarRepository avatarRepository;
+    private final StudentService studentService;
+    private final AvatarRepository avatarRepository;
 
     public AvatarService(StudentService studentService, AvatarRepository avatarRepository) {
         this.studentService = studentService;

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -17,7 +18,7 @@ public class Faculty {
 
     @OneToMany(mappedBy = "faculty")
     @JsonManagedReference
-    private Collection<Student> students;
+    private List<Student> students;
 
     public Faculty() {
     }
@@ -55,7 +56,7 @@ public class Faculty {
         return students;
     }
 
-    public void setStudents(Collection<Student> students) {
+    public void setStudents(List<Student> students) {
         this.students = students;
     }
 
