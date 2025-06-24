@@ -9,6 +9,7 @@ import ru.hogwarts.school.service.FacultyService;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 
 @RestController
 @RequestMapping("faculty")
@@ -62,11 +63,11 @@ public class FacultyController {
     }
 
     @GetMapping("/name-or-color")
-    public ResponseEntity<Faculty> findByNameOrColor(
+    public ResponseEntity<List<Faculty>> findByNameOrColor(
             @RequestParam(required = false) String name,
             @RequestParam(required = false) String color) {
-        Faculty faculty = facultyService.findByNameIgnoreCaseOrColorIgnoreCase(name, color);
-        return faculty != null ? ResponseEntity.ok(faculty) : ResponseEntity.notFound().build();
+        List<Faculty> faculties = facultyService.findByNameIgnoreCaseOrColorIgnoreCase(name, color);
+        return !faculties.isEmpty() ? ResponseEntity.ok(faculties) : ResponseEntity.notFound().build();
     }
 
     @GetMapping("/{id}/students")

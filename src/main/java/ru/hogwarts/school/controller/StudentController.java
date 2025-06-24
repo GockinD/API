@@ -9,6 +9,7 @@ import ru.hogwarts.school.service.StudentService;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 
 @RestController
 @RequestMapping("student")
@@ -29,14 +30,14 @@ public class StudentController {
     }
 
     @GetMapping("/age-between")
-    public ResponseEntity<Collection<Student>> findByAgeBetween(
+    public ResponseEntity<List<Student>> findByAgeBetween(
             @RequestParam int min,
             @RequestParam int max) {
         return ResponseEntity.ok(studentService.findByAgeBetween(min, max));
     }
 
     @GetMapping("/by-age")
-    public ResponseEntity<Collection<Student>> getStudentWithAge(@RequestParam(required = false) int age) {
+    public ResponseEntity<List<Student>> getStudentWithAge(@RequestParam(required = false) int age) {
         if (age > 0) {
             return ResponseEntity.ok(studentService.getStudentByAge(age));
         }
@@ -44,17 +45,17 @@ public class StudentController {
     }
 
     @GetMapping("/all")
-    public ResponseEntity<Collection<Student>> getAllStudent() {
+    public ResponseEntity<List<Student>> getAllStudent() {
         return ResponseEntity.ok(studentService.getAllStudent());
     }
 
     @GetMapping("/{id}/faculty")
     public ResponseEntity<Faculty> getFaculty(@PathVariable Long id) {
-        Student student = studentService.getStudent(id);
-        if (student == null) {
+        Faculty faculty = studentService.getFaculty(id);
+        if (faculty == null) {
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(student.getFaculty());
+        return ResponseEntity.ok(faculty);
     }
 
     @PostMapping

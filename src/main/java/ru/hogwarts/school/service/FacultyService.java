@@ -34,19 +34,19 @@ public class FacultyService {
         facultyRepository.deleteById(id);
     }
 
-    public Collection<Faculty> getFacultyByColor(String color) {
+    public List<Faculty> getFacultyByColor(String color) {
         return facultyRepository.findByColorIgnoreCase(color);
     }
 
-    public Collection<Faculty> getAllFaculty() {
+    public List<Faculty> getAllFaculty() {
         return facultyRepository.findAll();
     }
 
-    public Faculty findByNameIgnoreCaseOrColorIgnoreCase(String name, String color) {
+    public List<Faculty> findByNameIgnoreCaseOrColorIgnoreCase(String name, String color) {
         return facultyRepository.findByNameIgnoreCaseOrColorIgnoreCase(name, color);
     }
 
-    public Collection<Student> findStudentByFacultyId(Long facultyId) {
+    public List<Student> findStudentByFacultyId(Long facultyId) {
         return facultyRepository.findStudentsByFacultyId(facultyId);
     }
 }
