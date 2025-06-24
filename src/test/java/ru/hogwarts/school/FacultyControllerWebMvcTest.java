@@ -236,8 +236,7 @@ public class FacultyControllerWebMvcTest {
         faculty.setId(facultyId);
         List<Faculty> faculties = List.of(faculty);
 
-        when(facultyService.findByNameIgnoreCaseOrColorIgnoreCase(name, "")).thenReturn(faculties);
-        when(facultyService.findByNameIgnoreCaseOrColorIgnoreCase("", color)).thenReturn(faculties);
+        when(facultyService.findByNameIgnoreCaseOrColorIgnoreCase(name, null)).thenReturn(faculties);
 
         mockMvc.perform(get("/faculty/name-or-color")
                         .param("name", name)
@@ -247,6 +246,8 @@ public class FacultyControllerWebMvcTest {
                 .andExpect(jsonPath("$[0].id").value(facultyId))
                 .andExpect(jsonPath("$[0].name").value(name))
                 .andExpect(jsonPath("$[0].color").value(color));
+
+        when(facultyService.findByNameIgnoreCaseOrColorIgnoreCase(null, color)).thenReturn(faculties);
 
         mockMvc.perform(get("/faculty/name-or-color")
                         .param("color", color)
