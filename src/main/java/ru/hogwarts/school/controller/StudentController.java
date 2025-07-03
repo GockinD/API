@@ -77,4 +77,20 @@ public class StudentController {
         studentService.deleteStudent(id);
         return ResponseEntity.ok().build();
     }
+
+    @GetMapping("/quantity")
+    public ResponseEntity<Long> getQuantityStudent() {
+        return ResponseEntity.ok(studentService.getQuantityStudent());
+    }
+
+    @GetMapping("/averageAge")
+    public ResponseEntity<Long> getAverage() {
+        return ResponseEntity.ok(studentService.getAverageAge());
+    }
+
+    @GetMapping("/lostFive")
+    public ResponseEntity<List<Student>> getFiveLastStudent() {
+        return ResponseEntity.ok(studentService.getFiveLastStudent());
+    }
+
 }
