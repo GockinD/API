@@ -9,6 +9,7 @@ import ru.hogwarts.school.repository.StudentRepository;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Stream;
 
 @Service
 public class StudentService {
@@ -86,5 +87,30 @@ public class StudentService {
         logger.info("Метод завершен. Найдено студентов {}", students.size());
         logger.debug("список студентов: {}", students);
         return students;
+    }
+
+    public Long getTime1() {
+
+        long startTime1 = System.currentTimeMillis();
+        logger.info("Старт метода 1 без параллельного потока");
+        long sum = Stream.iterate(1L, a -> a + 1)
+                .limit(1_000_000)
+                .reduce(0L, (a, b) -> a + b);
+        long finishTime1 = System.currentTimeMillis() - startTime1;
+        logger.info("Время работы метода 1 - {}", finishTime1);
+        return finishTime1;
+    }
+
+    public Long getTime2(){
+        long startTime2 = System.currentTimeMillis();
+        logger.info("Старт метода 2 с параллельным потоком");
+        long sum2 = Stream.iterate(1L,a -> a + 1)
+                .limit(1000000)
+                .parallel()
+                .reduce(0L, Long::sum);
+
+        long finishTime2 = System.currentTimeMillis() - startTime2;
+        logger.info("Время работы метода 2 - {}", finishTime2);
+        return finishTime2;
     }
 }

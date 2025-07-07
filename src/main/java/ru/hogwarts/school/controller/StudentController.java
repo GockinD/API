@@ -7,7 +7,6 @@ import ru.hogwarts.school.model.Faculty;
 import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.service.StudentService;
 
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -92,5 +91,31 @@ public class StudentController {
     public ResponseEntity<List<Student>> getFiveLastStudent() {
         return ResponseEntity.ok(studentService.getFiveLastStudent());
     }
+    @GetMapping("/name_beginning_A")
+    public List<String> getAllStudentNameBeginningWithG() {
+        return studentService.getAllStudent().parallelStream()
+                .map(Student::getName)
+                .filter(name -> name.startsWith("Г"))
+                .map(String::toUpperCase)
+                .sorted()
+                .toList();
+    }
 
+    @GetMapping("/average_age_all_student")
+    public Double getAverageAgeStudent() {
+        return studentService.getAllStudent().parallelStream()
+                .mapToInt(Student::getAge)
+                .average()
+                .orElse(0.0);
+    }
+
+    @GetMapping("/get_time_1")
+    public Long getTime1() {
+        return studentService.getTime1();
+    }
+
+    @GetMapping("/get_time_2")
+    public Long getTime2() {
+        return studentService.getTime1();
+    }
 }
