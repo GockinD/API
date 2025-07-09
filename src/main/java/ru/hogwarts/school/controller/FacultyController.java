@@ -1,15 +1,20 @@
 package ru.hogwarts.school.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.hogwarts.school.model.Faculty;
 import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.service.FacultyService;
+import ru.hogwarts.school.service.StudentService;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Stream;
 
 @RestController
 @RequestMapping("faculty")
@@ -74,5 +79,13 @@ public class FacultyController {
     public ResponseEntity<Collection<Student>> getStudentsByFaculty(@PathVariable Long id) {
         Collection<Student> students = facultyService.findStudentByFacultyId(id);
         return ResponseEntity.ok(students);
+    }
+
+    @GetMapping("/longest_name")
+    public String getLongestNameFaculty() {
+        return facultyService.getAllFaculty().parallelStream()
+                .map(Faculty::getName)
+                .max(Comparator.comparingInt(String::length))
+                .orElse(null);
     }
 }

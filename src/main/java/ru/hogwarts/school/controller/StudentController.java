@@ -7,9 +7,10 @@ import ru.hogwarts.school.model.Faculty;
 import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.service.StudentService;
 
-import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 
 @RestController
 @RequestMapping("student")
@@ -76,5 +77,89 @@ public class StudentController {
     public ResponseEntity<Void> deleteStudent(@PathVariable long id) {
         studentService.deleteStudent(id);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/quantity")
+    public ResponseEntity<Long> getQuantityStudent() {
+        return ResponseEntity.ok(studentService.getQuantityStudent());
+    }
+
+    @GetMapping("/averageAge")
+    public ResponseEntity<Long> getAverage() {
+        return ResponseEntity.ok(studentService.getAverageAge());
+    }
+
+    @GetMapping("/lostFive")
+    public ResponseEntity<List<Student>> getFiveLastStudent() {
+        return ResponseEntity.ok(studentService.getFiveLastStudent());
+    }
+
+    @GetMapping("/name_beginning_A")
+    public List<String> getAllStudentNameBeginningWithG() {
+        return studentService.getAllStudent().parallelStream()
+                .map(Student::getName)
+                .filter(name -> name.startsWith("Г"))
+                .map(String::toUpperCase)
+                .sorted()
+                .toList();
+    }
+
+    @GetMapping("/average_age_all_student")
+    public Double getAverageAgeStudent() {
+        return studentService.getAllStudent().parallelStream()
+                .mapToInt(Student::getAge)
+                .average()
+                .orElse(0.0);
+    }
+
+    @GetMapping("/get_time_1")
+    public Long getTime1() {
+        return studentService.getTime1();
+    }
+
+    @GetMapping("/get_time_2")
+    public Long getTime2() {
+        return studentService.getTime1();
+    }
+
+    @GetMapping("/students/print-parallel")
+    public void getFirstTwoStudentParallel() {
+        List<Student> students = studentService.getAllStudent();
+
+        System.out.println(students.get(0).getName());
+        System.out.println(students.get(1).getName());
+
+        new Thread(() -> {
+            System.out.println(students.get(2).getName());
+            System.out.println(students.get(3).getName());
+        }).start();
+
+        new Thread(() -> {
+            System.out.println(students.get(4).getName());
+            System.out.println(students.get(5).getName());
+        }).start();
+    }
+
+    @GetMapping("/students/print-synchronized")
+    public void getFirstTwoStudentSynchronized() {
+        List<Student> students = studentService.getAllStudent();
+        Object flag = new Object();
+
+        new Thread(() -> {
+            synchronized (flag) {
+                System.out.println(students.get(2).getName());
+                System.out.println(students.get(3).getName());
+            }
+        }).start();
+
+        new Thread(() -> {
+            synchronized (flag) {
+                System.out.println(students.get(4).getName());
+                System.out.println(students.get(5).getName());
+            }
+        }).start();
+        
+        System.out.println(students.get(0).getName());
+        System.out.println(students.get(1).getName());
     }
 }
