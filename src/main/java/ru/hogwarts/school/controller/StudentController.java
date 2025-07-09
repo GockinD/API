@@ -8,7 +8,9 @@ import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.service.StudentService;
 
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 
 @RestController
 @RequestMapping("student")
@@ -91,6 +93,7 @@ public class StudentController {
     public ResponseEntity<List<Student>> getFiveLastStudent() {
         return ResponseEntity.ok(studentService.getFiveLastStudent());
     }
+
     @GetMapping("/name_beginning_A")
     public List<String> getAllStudentNameBeginningWithG() {
         return studentService.getAllStudent().parallelStream()
@@ -117,5 +120,46 @@ public class StudentController {
     @GetMapping("/get_time_2")
     public Long getTime2() {
         return studentService.getTime1();
+    }
+
+    @GetMapping("/students/print-parallel")
+    public void getFirstTwoStudentParallel() {
+        List<Student> students = studentService.getAllStudent();
+
+        System.out.println(students.get(0).getName());
+        System.out.println(students.get(1).getName());
+
+        new Thread(() -> {
+            System.out.println(students.get(2).getName());
+            System.out.println(students.get(3).getName());
+        }).start();
+
+        new Thread(() -> {
+            System.out.println(students.get(4).getName());
+            System.out.println(students.get(5).getName());
+        }).start();
+    }
+
+    @GetMapping("/students/print-synchronized")
+    public void getFirstTwoStudentSynchronized() {
+        List<Student> students = studentService.getAllStudent();
+        Object flag = new Object();
+
+        new Thread(() -> {
+            synchronized (flag) {
+                System.out.println(students.get(2).getName());
+                System.out.println(students.get(3).getName());
+            }
+        }).start();
+
+        new Thread(() -> {
+            synchronized (flag) {
+                System.out.println(students.get(4).getName());
+                System.out.println(students.get(5).getName());
+            }
+        }).start();
+        
+        System.out.println(students.get(0).getName());
+        System.out.println(students.get(1).getName());
     }
 }
